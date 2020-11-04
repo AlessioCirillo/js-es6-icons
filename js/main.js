@@ -114,7 +114,7 @@ $(document).ready(function(){
 //FUNCTION PRINT TO SCREEN
 function printToScreen(icons, container){
 
-    icons.forEach(icon => {
+    icons.forEach((icon) => {
         
         const {family, prefix, name} = icon;
 
