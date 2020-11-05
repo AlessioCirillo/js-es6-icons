@@ -100,7 +100,6 @@ $(document).ready(function(){
           family: 'fas',
         },
     ];
-    console.log(icons);
     
     //ARRAY COLORI 
     const color = ['blue', 'orange', 'purple'];
@@ -108,13 +107,22 @@ $(document).ready(function(){
     //ICONS CONTAINER
     const container = $('.icons');
 
-    //PRINT ON SCREEN
-    // printToScreen(icons, container);
-
     //PRINT COLOR ICONS
     const coloredIcons = colorIcons(icons, color);
-    console.log(coloredIcons);
     printToScreen(coloredIcons, container);
+
+    //ICONS BY TYPE
+    const select = $('#type');
+    const types = getTypes(coloredIcons);
+
+    genOptions(types, select);
+
+    select.change(() =>{
+      const selected = select.val();
+
+      const filterdeIcons = filterIcons(coloredIcons, selected)
+      printToScreen(filterdeIcons, container);
+    });
 
 });//----end ready
 
@@ -122,25 +130,26 @@ $(document).ready(function(){
 //FUNCTION PRINT ON SCREEN
 function printToScreen(icons, container){
 
-    icons.forEach((icon) => {
+  container.html('');
+
+  icons.forEach((icon) => {
         
-        const {family, prefix, name, color} = icon;
+      const {family, prefix, name, color} = icon;
 
-        const html = 
-        `<div class="icon">
-            <i class="${family} ${prefix}${name}" style="color: ${color}"></i>
-            <div class="title">${name}</div>
-        </div>`;
+      const html = 
+      `<div class="icon">
+          <i class="${family} ${prefix}${name}" style="color: ${color}"></i>
+           <div class="title">${name}</div>
+      </div>`;
 
-        container.append(html);
-    });
+      container.append(html);
+  });
 }
 
 //FUNCTION COLOREDICONS
 function colorIcons(icons, color){
 
     const types = getTypes(icons);
-    console.log(types);
 
     const coloredIcons = icons.map((icon)=>{
 
@@ -167,3 +176,23 @@ function getTypes(icons){
     return types;
 }
 
+//FUNCTION GENOPTION
+function genOptions(types, select) { 
+
+    types.forEach((option) =>{
+      select.append(`<option value="${option}">${option}</option>`);
+    }); 
+};
+
+//FUNCTION FILTEREDICONS
+function filterIcons(coloredIcons, selected){
+
+    if (selected === 'all'){
+     return coloredIcons;
+    }
+
+    const filtered = coloredIcons.filter((icon) =>{
+      return icon.type === selected;
+    });
+    return filtered;
+};
